@@ -4,3 +4,4 @@
 - sa fie user names unici
 - daca inputul nu e bun sa nu crape
 - sa nu crape programul in niciun caz niciodata
+- cum sa ramana baza de date constanta

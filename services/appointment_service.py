@@ -1,6 +1,6 @@
-from data.storage import appointments, consultants, TIMEZONES, users  # Import TIMEZONES
-from utils.timezone import convert_to_timezone
+from data.storage import appointments, consultants, users
 from models.appointment import Appointment
+from utils.timezone import convert_to_timezone
 
 class AppointmentService:
     def __init__(self, user_service):
@@ -8,8 +8,8 @@ class AppointmentService:
 
     def create_appointment(self):
         self.user_service.list_users()
-        user_id = int(input("Enter user ID: "))
-        user = next((u for u in users if u.user_id == user_id), None)
+        user_name = input("Enter user name: ")
+        user = next((u for u in users if u.name.lower() == user_name.lower()), None)
         if not user:
             print("User not found.")
             return
@@ -24,13 +24,11 @@ class AppointmentService:
         consultant = consultants[consultant_idx]
 
         datetime = input("Enter appointment date and time (YYYY-MM-DD HH:MM): ")
-        tz_index = TIMEZONES.index(user.timezone) + 1  # Get the 1-based index of user's time zone
+        local_time = convert_to_timezone(datetime, user.timezone)
 
-        local_time = convert_to_timezone(datetime, tz_index)
-        if local_time:
-            appointment = Appointment(user, consultant, local_time)
-            appointments.append(appointment)
-            print("Appointment created successfully.")
+        appointment = Appointment(user, consultant, local_time)
+        appointments.append(appointment)
+        print("Appointment created successfully.")
 
     def list_appointments(self):
         if not appointments:

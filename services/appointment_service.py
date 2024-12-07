@@ -3,7 +3,7 @@ from models.appointment import Appointment
 from utils.timezone import convert_to_timezone
 
 class AppointmentService:
-    def _init_(self, user_service):
+    def __init__(self, user_service):
         self.user_service = user_service
 
     def create_appointment(self):
@@ -34,4 +34,5 @@ class AppointmentService:
         if not appointments:
             print("No appointments scheduled.")
             return
-        for appt in appointments: print(appt)
+        for appt in appointments:
+            print(appt)

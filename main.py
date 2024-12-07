@@ -1,9 +1,3 @@
-'''
-this is the main file;
-we run the app from here;
-here we should find only the menu and no other implementation
-'''
-
 from services.user_service import UserService
 from services.appointment_service import AppointmentService
 
@@ -39,4 +33,5 @@ def main():
         else:
             print("Invalid choice. Please try again.")
 
-if __name__ == "_main_": main()
+if __name__ == "__main__":
+    main()

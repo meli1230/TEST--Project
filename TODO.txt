@@ -1,0 +1,3 @@
+- consultant - le dam nume la consultanti (sunt consultant A, B, C)
+- listam la fiecare ce au liber
+- facem mai complex la add_appointment

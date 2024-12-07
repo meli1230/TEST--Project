@@ -26,3 +26,4 @@ class UserService:
             return
         for user in users:
             print(f"ID: {user.user_id}, Name: {user.name}, Timezone: {user.timezone}")
+

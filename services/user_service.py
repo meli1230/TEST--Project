@@ -11,7 +11,7 @@ class UserService:
         print(f"User {name} added successfully.")
 
     def delete_user(self):
-        self.list_users()
+        self.list_users_when_delete()
         username = input("Enter user name to delete: ")
         for user in users:
             if user.name == username:
@@ -27,3 +27,10 @@ class UserService:
             return
         for user in users:
             print(f"ID: {user.user_id}, Name: {user.name}, Timezone: {user.timezone}")
+
+    def list_users_when_delete(self):
+        if not users:
+            print("No users found.")
+            return
+        for user in users:
+            print(f"Name: {user.name}, Timezone: {user.timezone}")

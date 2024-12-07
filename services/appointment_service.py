@@ -1,4 +1,4 @@
-from data.storage import users, appointments, consultants, TIMEZONES  # Import users
+from data.storage import appointments, consultants, TIMEZONES, users  # Import TIMEZONES
 from utils.timezone import convert_to_timezone
 from models.appointment import Appointment
 
@@ -9,7 +9,6 @@ class AppointmentService:
     def create_appointment(self):
         self.user_service.list_users()
         user_id = int(input("Enter user ID: "))
-        # Use the imported `users` list
         user = next((u for u in users if u.user_id == user_id), None)
         if not user:
             print("User not found.")

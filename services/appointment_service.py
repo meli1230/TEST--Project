@@ -1,4 +1,4 @@
-from data.storage import appointments, consultants
+from data.storage import appointments, consultants, users
 from models.appointment import Appointment
 from utils.timezone import convert_to_timezone
 
@@ -8,8 +8,8 @@ class AppointmentService:
 
     def create_appointment(self):
         self.user_service.list_users()
-        user_id = int(input("Enter user ID: "))
-        user = next((u for u in users if u.user_id == user_id), None)
+        user_name = input("Enter user name: ")
+        user = next((u for u in users if u.name.lower() == user_name.lower()), None)
         if not user:
             print("User not found.")
             return

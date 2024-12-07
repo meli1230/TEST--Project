@@ -12,13 +12,14 @@ class UserService:
 
     def delete_user(self):
         self.list_users()
-        user_id = int(input("Enter user ID to delete: "))
+        username = input("Enter user name to delete: ")
         for user in users:
-            if user.user_id == user_id:
+            if user.name == username:
                 users.remove(user)
                 print(f"User {user.name} deleted successfully.")
                 return
         print("User not found.")
+
 
     def list_users(self):
         if not users:

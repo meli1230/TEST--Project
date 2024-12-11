@@ -15,11 +15,15 @@ class TestUserService(unittest.TestCase):
         self.assertEqual(len(users), 1)
         self.assertEqual(users[0].name, 'Utilizator test')
 
-    @patch('builtins.input', side_effect=['Utilizator test2'])
-    def test_add_user_valid_name_2(self, mock_input):
+    @patch('builtins.input', side_effect=['Utilizator123'])
+    def test_add_user_invalidNameNumbers(self, mock_input):
         self.service.add_user()
-        self.assertEqual(len(users), 1)
-        self.assertEqual(users[0].name, 'Utilizator test2')
+        self.assertEqual(len(users), 0)
+
+    @patch('builtins.input', side_effect=['Utilizator@Special'])
+    def test_add_user_invalidNameSpecialChars(self, mock_input):
+        self.service.add_user()
+        self.assertEqual(len(users), 0)
 
     @patch('builtins.input', side_effect=['Utilizator test'])
     def test_delete_user_valid(self, mock_input):
@@ -39,11 +43,12 @@ class TestUserService(unittest.TestCase):
 
     @patch('builtins.input', side_effect=['Utilizator test', 'Utilizator test2'])
     def test_add_multiple_users(self, mock_input):
-        self.service.add_user()
-        self.service.add_user()
+        self.service.add_user()  # Va primi 'Utilizator test'
+        self.service.add_user()  # Va primi 'Utilizator test2'
         self.assertEqual(len(users), 2)
         self.assertEqual(users[0].name, 'Utilizator test')
         self.assertEqual(users[1].name, 'Utilizator test2')
+
 
 if __name__ == '__main__':
     unittest.main()

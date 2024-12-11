@@ -124,3 +124,7 @@ FAILED (errors=1)
 
 Process finished with exit code 1
 Asta returneaza la run ;-;
+
+-Pentru a doua varianta: Avem Fail in cazul in care numele contine ori numere ori caractere speciale si
+testarea se opreste pentru test_add_multiple_users care ar trebui sa verifice daca se pot adauga mai multi utilizatori, deci
+cred ca e ceva gresit la cum am facut eu functia de testare dar nu gasesc o solutie

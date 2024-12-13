@@ -1,6 +1,13 @@
 users = [] #list to store information about users
 appointments = [] #list to store scheduled appointments
 consultants = ["Consultant A", "Consultant B", "Consultant C"] #predefines list of consultants available for appointments
+# Predefined available slots for consultants
+available_slots = {
+    "Consultant A": ["2024-12-14 10:00", "2024-12-14 11:00", "2024-12-14 14:00"],
+    "Consultant B": ["2024-12-15 09:00", "2024-12-15 13:00", "2024-12-15 15:00"],
+    "Consultant C": ["2024-12-16 08:00", "2024-12-16 12:00", "2024-12-16 16:00"],
+}
+
 
 #list of supported time zones for scheduling appointments
 #timezones

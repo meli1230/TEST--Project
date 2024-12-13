@@ -1,26 +1,34 @@
 from datetime import datetime  #import datetime for working with date and time objects
 from zoneinfo import ZoneInfo  #import ZoneInfo for timezone handling
 from data.storage import TIMEZONES  #import predefined list of valid timezones
+from datetime import datetime, timedelta
 
-def convert_to_timezone(date_str, timezone_str):
+# Helper function to calculate UTC offset in hours
+def get_timezone_offset(timezone):
+    timezone_offsets = {
+        "UTC": 0,
+        "Europe/Bucharest": 2,  # Hardcode Bucharest's offset from UTC (adjust for daylight saving if necessary)
+        "Europe/London": 0,  # Example for London; adjust as needed
+        "America/New_York": -5,
+        # Add other timezones as needed
+    }
+    return timezone_offsets.get(timezone, 0)  # Default to UTC if timezone is unknown
+
+def convert_to_timezone(date_str, from_timezone, to_timezone):
     """
-    Converts a naive datetime string to a timezone-aware datetime object.
-
-    :param date_str: A string representing the date and time in the format "YYYY-MM-DD HH:MM".
-    :param timezone_str: A string representing the desired timezone (e.g., "UTC", "Europe/Paris").
-    :return: A timezone-aware datetime object or None if there is an error.
+    Converts a naive datetime string from one timezone to another.
+    :param date_str: The date and time in "YYYY-MM-DD HH:MM" format
+    :param from_timezone: Original timezone of the datetime
+    :param to_timezone: Target timezone for conversion
+    :return: Converted datetime string in the target timezone
     """
     try:
-        if timezone_str not in TIMEZONES:  #validate if the provided timezone is in the list of valid timezones
-            print("Invalid timezone. Please ensure the timezone is valid.")  #print an error message for invalid timezone
-            return None  #return None if the timezone is invalid
-
-        naive_datetime = datetime.strptime(date_str, "%Y-%m-%d %H:%M")  #parse the datetime string into a naive datetime object
-
-        localized_datetime = naive_datetime.replace(tzinfo=ZoneInfo(timezone_str))  #convert the naive datetime to timezone-aware
-        return localized_datetime  #return the timezone-aware datetime object
-    except ValueError:  #catch errors in datetime parsing
-        print("Invalid date format. Please enter the date in 'YYYY-MM-DD HH:MM' format.")  #print an error message for invalid date format
-    except Exception as e:  #catch other unexpected errors
-        print(f"Error in timezone conversion: {e}")  #print a generic error message
-    return None  #return None if any exception occurs
+        naive_datetime = datetime.strptime(date_str, "%Y-%m-%d %H:%M")  # Parse datetime
+        from_offset = get_timezone_offset(from_timezone)  # Get offset for original timezone
+        to_offset = get_timezone_offset(to_timezone)  # Get offset for target timezone
+        offset_diff = to_offset - from_offset  # Calculate the time difference in hours
+        converted_datetime = naive_datetime + timedelta(hours=offset_diff)  # Apply the offset difference
+        return converted_datetime.strftime("%Y-%m-%d %H:%M")  # Return as formatted string
+    except Exception as e:
+        print(f"Error in timezone conversion: {e}")
+        return None

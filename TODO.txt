@@ -4,6 +4,7 @@
 - sa fie user names unici
 - daca inputul nu e bun sa nu crape
 - sa nu crape programul in niciun caz niciodata
+- testare pozitiva SI negativa
 
 
 -La prima varianta de testare a lui Adi:

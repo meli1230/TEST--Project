@@ -1,4 +1,3 @@
-# created by virtualenv automatically
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -21,10 +20,6 @@ eggs/
 *.egg
 *.whl
 
-# PyInstaller
-*.manifest
-*.spec
-
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
@@ -46,24 +41,16 @@ coverage.xml
 # PyCharm
 .idea/
 
-# VS Code
-.vscode/
-
 # Jupyter Notebook checkpoints
-.ipynb_checkpoints
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv.bak/
 
 # Environments
 .env
 *.env
-
-# Virtual environments created with virtualenvwrapper or virtualenv
-.venv/
-venv.bak/
-venv/
-
-# Spyder project settings
-.spyderproject
-.spyproject
 
 # macOS system files
 .DS_Store
@@ -71,11 +58,3 @@ venv/
 # Windows system files
 Thumbs.db
 ehthumbs.db
-
-# VS Code specific settings
-.vscode/settings.json
-.vscode/tasks.json
-.vscode/launch.json
-.vscode/extensions.json
-.vscode/*.code-workspace
-.vscode/*.db

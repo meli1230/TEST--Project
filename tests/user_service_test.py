@@ -64,6 +64,5 @@ class TestUserService(unittest.TestCase):
             mock_print.assert_any_call("ID: 1, Name: User One, Timezone: UTC")  #assert user one details
             mock_print.assert_any_call("ID: 2, Name: User Two, Timezone: Europe/London")  #assert user two details
 
-
 if __name__ == "__main__":  #run the tests if the script is executed directly
     unittest.main()  #execute all the tests

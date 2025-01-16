@@ -124,3 +124,6 @@ Aplicatia de Programare a Intalnirilor faciliteaza utilizatorii in programarea i
   - timezone.py
   - main.py
 
+
+
+#scriem ca e in mod text, scriem meniul

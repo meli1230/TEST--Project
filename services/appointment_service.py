@@ -1,99 +1,109 @@
-from data.storage import appointments, consultants, available_slots, users  # import data lists for appointments, consultants, and users
-from models.appointment import Appointment  # import the Appointment model
-from utils.timezone import convert_to_timezone  # import a utility function for timezone conversion
-import re  # import regular expressions module for input validation
+from Database.database import appointments_table
+from data.storage import consultants, available_slots  # Eliminat lista `users`
+from models.appointment import Appointment  # Import the Appointment model
+from utils.timezone import convert_to_timezone  # Import a utility function for timezone conversion
+from Database.database import list_users as db_list_users  # Import list_users direct din baza de date
+from Database.database import add_appointment
+from Database.database import list_appointments as db_list_appointments
+import re  # Import regular expressions module for input validation
 
-# service class to handle appointment-related functionality
+# Service class to handle appointment-related functionality
 class AppointmentService:
-    # constructor for the AppointmentService class
-    def __init__(self, user_service):
-        self.user_service = user_service  # initialize with a user service for user-related operations
+    # Constructor for the AppointmentService class
+    def __init__(self, appointments_table, user_service):
+        self.appointments_table = appointments_table  # Store the appointments table
+        self.user_service = user_service  # Initialize with a user service for user-related operations
 
-    # method to create a new appointment
-    # method to create a new appointment
+    # Method to create a new appointment
     def create_appointment(self):
         try:
-            self.user_service.list_users()  # list all available users
+            users = db_list_users()  # Fetch users directly from the database
+            if not users:
+                print("No users found.")
+                return
+
+            # List all users
+            for user in users:
+                print(f"ID: {user['user_id']}, Name: {user['name']}, Timezone: {user['timezone']}")
+
+            # Ask for user name
             while True:
-                user_name = input("Enter user name: ").strip()  # prompt user for their name and remove extra spaces
-                # Regex to allow only letters (including accented ones) and spaces
+                user_name = input("Enter user name: ").strip()
+                # Validate input using regex (letters and spaces only)
                 if not re.match(r'^[a-zA-Z\u00C0-\u017F\s]+$', user_name):
                     print("Invalid name. Please use only letters and spaces.")
-                    continue  # Ask for input again
+                    continue
 
-                # Find user by name (case insensitive)
-                user = next((u for u in users if u.name.lower() == user_name.lower()), None)
-                if not user:  # If user is not found
+                user = next((u for u in users if u['name'].lower() == user_name.lower()), None)
+                if not user:
                     print("User not found. Please try again.")
-                    return
-                break  # Exit loop when name is valid and user is found
+                    continue
+                break
 
-            while True:  # Loop only for consultant selection
-                print("Available Consultants:")
-                for idx, consultant in enumerate(consultants, start=1):
-                    print(f"{idx}. {consultant}")
+            print("Available Consultants:")
+            for idx, consultant in enumerate(consultants, 1):
+                print(f"{idx}. {consultant}")
 
+            while True:
                 try:
-                    consultant_choice = int(input("Choose consultant: ").strip())
-                    if consultant_choice < 1 or consultant_choice > len(consultants):
-                        raise ValueError
-                except ValueError:
-                    print("Invalid consultant choice. Please try again.")
-                    continue  # Restart consultant selection
+                    consultant_idx = int(input("Choose consultant: ")) - 1
+                    if consultant_idx not in range(len(consultants)):
+                        raise ValueError("Invalid consultant index.")
+                    consultant = consultants[consultant_idx]
+                    break
+                except ValueError as e:
+                    print(e)
 
-                chosen_consultant = consultants[consultant_choice - 1]
-                break  # Exit loop on valid choice
-
-            consultant_slots = available_slots.get(chosen_consultant, [])
-            if not consultant_slots:
-                print(f"No available slots for {chosen_consultant}.")
+            print("Available slots:")
+            slots = available_slots.get(consultant, [])
+            if not slots:
+                print(f"No slots available for {consultant}.")
                 return
 
             while True:
-                print("Available slots:")
-                for idx, slot in enumerate(consultant_slots, start=1):
-                    print(f"{idx}. {slot}")
-
                 try:
-                    slot_choice = input("Choose a slot: ").strip()
-                    if not slot_choice.isdigit():
-                        raise ValueError("Slot choice must be a number.")
+                    for idx, slot in enumerate(slots, 1):
+                        print(f"{idx}. {slot}")
 
-                    slot_choice = int(slot_choice)
-                    if slot_choice < 1 or slot_choice > len(consultant_slots):
-                        raise ValueError("Slot choice out of range.")
+                    slot_idx = int(input("Choose a slot: ")) - 1
+                    if slot_idx not in range(len(slots)):
+                        raise ValueError("Invalid slot index.")
+                    chosen_slot = slots.pop(slot_idx)
+                    break
                 except ValueError as e:
-                    print(f"Invalid slot choice: {e}. Please try again.")
-                    continue  # Restart slot selection
+                    print(e)
 
-                chosen_slot = consultant_slots[slot_choice - 1]
-                break  # Exit loop on valid slot choice
+            customer_time = convert_to_timezone(chosen_slot, "UTC", user['timezone'])
+            mentor_time = convert_to_timezone(chosen_slot, "UTC", "Europe/Bucharest")
 
-            # Convert chosen slot to customer_time and mentor_time
-            customer_time = chosen_slot  # assuming slot is already in customer's timezone
-            mentor_time = convert_to_timezone(chosen_slot, "Customer_Timezone",
-                                              "UTC")  # convert to a different timezone if needed
+            appointment = Appointment(user, consultant, customer_time, mentor_time)
 
-            # Remove the chosen slot from available slots for the chosen consultant
-            available_slots[chosen_consultant].remove(chosen_slot)
+            add_appointment({
+                'user_id': user['user_id'],
+                'name': user['name'],
+                'timezone': user['timezone']
+            }, consultant, customer_time, mentor_time)
 
-            appointment = Appointment(user=user, consultant=chosen_consultant, customer_time=customer_time,
-                                      mentor_time=mentor_time)
-            appointments.append(appointment)
-            print("Appointment created successfully!")
+            print("Appointment created successfully.")
+            print(f"Appointment time in your timezone: {customer_time}")
+            print(f"Appointment time in Bucharest timezone: {mentor_time}")
 
         except KeyboardInterrupt:
             print("\nProgram interrupted by user. Exiting gracefully.")
 
-    # method to list all appointments
+    # Method to list all scheduled appointments
     def list_appointments(self):
         try:
+            appointments = db_list_appointments()  # Fetch appointments from the database
             if not appointments:
                 print("No appointments scheduled.")
                 return
 
-            print("Scheduled Appointments:")
-            for idx, appointment in enumerate(appointments, start=1):
-                print(f"{idx}. User: {appointment.user.name}, Consultant: {appointment.consultant}, Time: {appointment.customer_time}")
+            for appt in appointments:
+                print(f"User: {appt['user']['name']}, Consultant: {appt['consultant']}")
+                print(f"  Time in Customer's Timezone: {appt['customer_time']}")
+                print(f"  Time in Mentor's Timezone: {appt['mentor_time']}")
+                print("-" * 40)
+
         except KeyboardInterrupt:
             print("\nProgram interrupted by user. Exiting gracefully.")

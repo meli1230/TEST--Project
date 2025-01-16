@@ -1,3 +1,4 @@
+from Database.database import users_table, appointments_table  # Importă tabelele din database.py
 from services.user_service import UserService  #import the UserService class
 from services.appointment_service import AppointmentService  #import the AppointmentService class
 
@@ -12,8 +13,8 @@ def main_menu():  #function to display the main menu and get user input
     return input("Choose an option: ")  #return the user's choice as input
 
 def main():  #main function to run the application
-    user_service = UserService()  #create an instance of UserService
-    appointment_service = AppointmentService(user_service)  #create an instance of AppointmentService with user_service
+    user_service = UserService(users_table)  #create an instance of UserService
+    appointment_service = AppointmentService(appointments_table, user_service) #create an instance of AppointmentService with user_service
 
     try:
         while True:  #start an infinite loop for the main menu

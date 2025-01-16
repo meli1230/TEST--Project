@@ -1,0 +1,6 @@
+- consultant - le dam nume la consultanti (sunt consultant A, B, C)
+- listam la fiecare ce au liber
+- facem mai complex la add_appointment
+- sa fie user names unici
+- daca inputul nu e bun sa nu crape
+- sa nu crape programul in niciun caz niciodata

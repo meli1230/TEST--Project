@@ -2,6 +2,7 @@
 from data.storage import users, TIMEZONES  #import the user data and timezone list
 from models.user import User  #import the User model
 import re
+from utils.timezone import choose_timezone
 
 #class to handle user-related functionality
 import re  # Import regex module for name validation
@@ -66,3 +67,4 @@ class UserService:
             return  #exit the function
         for user in users:  #iterate through the list of users
             print(f"Name: {user.name}, Timezone: {user.timezone}")  #display user details
+

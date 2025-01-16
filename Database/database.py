@@ -1,7 +1,12 @@
 from tinydb import TinyDB, Query
+import os
 
-# Inițializarea bazei de date
-db = TinyDB('db.json')
+# Get the base directory dynamically relative to the script's location
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # One level up from the current script
+DB_PATH = os.path.join(BASE_DIR, 'db.json')  # Database file path
+
+# Initialize the database
+db = TinyDB(DB_PATH)
 
 # Tabele pentru utilizatori și programări
 users_table = db.table('users')

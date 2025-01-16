@@ -9,6 +9,11 @@
       "user_id": 2,
       "name": "ale",
       "timezone": "America/Anchorage"
+    },
+    "3": {
+      "user_id": 3,
+      "name": "paula",
+      "timezone": "America/Los_Angeles"
     }
   },
   "appointments": {

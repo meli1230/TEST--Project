@@ -15,23 +15,33 @@ def main():  #main function to run the application
     user_service = UserService()  #create an instance of UserService
     appointment_service = AppointmentService(user_service)  #create an instance of AppointmentService with user_service
 
-    while True:  #start an infinite loop for the main menu
-        choice = main_menu()  #display the main menu and get the user's choice
-        if choice == "1":  #if the choice is 1
-            user_service.add_user()  #call the add_user method
-        elif choice == "2":  #if the choice is 2
-            user_service.delete_user()  #call the delete_user method
-        elif choice == "3":  #if the choice is 3
-            user_service.list_users()  #call the list_users method
-        elif choice == "4":  #if the choice is 4
-            appointment_service.create_appointment()  #call the create_appointment method
-        elif choice == "5":  #if the choice is 5
-            appointment_service.list_appointments()  #call the list_appointments method
-        elif choice == "6":  #if the choice is 6
-            print("Goodbye!")  #print a goodbye message
-            break  #exit the loop and end the program
-        else:  #if the choice is invalid
-            print("Invalid choice. Please try again.")  #print an error message
+    try:
+        while True:  #start an infinite loop for the main menu
+            choice = main_menu()  #display the main menu and get the user's choice
+            if choice == "1":  #if the choice is 1
+                user_service.add_user()  #call the add_user method
+            elif choice == "2":  #if the choice is 2
+                user_service.delete_user()  #call the delete_user method
+            elif choice == "3":  #if the choice is 3
+                user_service.list_users()  #call the list_users method
+            elif choice == "4":  #if the choice is 4
+                appointment_service.create_appointment()  #call the create_appointment method
+            elif choice == "5":  #if the choice is 5
+                appointment_service.list_appointments()  #call the list_appointments method
+            elif choice == "6":  #if the choice is 6
+                print("Goodbye!")  #print a goodbye message
+                break  #exit the loop and end the program
+            else:  #if the choice is invalid
+                print("Invalid choice. Please try again.")  #print an error message
+    except KeyboardInterrupt:
+        print("\nProgram interrupted by user. Exiting gracefully.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}. Exiting gracefully.")
+
 
 if __name__ == "__main__":  #run the program only if the script is executed directly
     main()  #call the main function
+
+
+
+

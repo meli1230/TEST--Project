@@ -10,78 +10,90 @@ class AppointmentService:
         self.user_service = user_service  # initialize with a user service for user-related operations
 
     # method to create a new appointment
+    # method to create a new appointment
     def create_appointment(self):
-        self.user_service.list_users()  # list all available users
-        while True:
-            user_name = input("Enter user name: ").strip()  # prompt user for their name and remove extra spaces
-            if not re.match(r'^[a-zA-Z\u00C0-\u017F\s]+$', user_name):  # allow letters, spaces, and accented characters
-                print("Invalid name. Please use only letters and spaces.")
-                continue
+        try:
+            self.user_service.list_users()  # list all available users
+            while True:
+                user_name = input("Enter user name: ").strip()  # prompt user for their name and remove extra spaces
+                # Regex to allow only letters (including accented ones) and spaces
+                if not re.match(r'^[a-zA-Z\u00C0-\u017F\s]+$', user_name):
+                    print("Invalid name. Please use only letters and spaces.")
+                    continue  # Ask for input again
 
-            user = next((u for u in users if u.name.lower() == user_name.lower()), None)  # find user by name, case insensitive
-            if not user:  # check if user is not found
-                print("User not found. Please try again.")
+                # Find user by name (case insensitive)
+                user = next((u for u in users if u.name.lower() == user_name.lower()), None)
+                if not user:  # If user is not found
+                    print("User not found. Please try again.")
+                    return
+                break  # Exit loop when name is valid and user is found
+
+            while True:  # Loop only for consultant selection
+                print("Available Consultants:")
+                for idx, consultant in enumerate(consultants, start=1):
+                    print(f"{idx}. {consultant}")
+
+                try:
+                    consultant_choice = int(input("Choose consultant: ").strip())
+                    if consultant_choice < 1 or consultant_choice > len(consultants):
+                        raise ValueError
+                except ValueError:
+                    print("Invalid consultant choice. Please try again.")
+                    continue  # Restart consultant selection
+
+                chosen_consultant = consultants[consultant_choice - 1]
+                break  # Exit loop on valid choice
+
+            consultant_slots = available_slots.get(chosen_consultant, [])
+            if not consultant_slots:
+                print(f"No available slots for {chosen_consultant}.")
                 return
-            break
 
-        while True:  # Loop only for consultant selection
-            print("Available Consultants:")
-            for idx, consultant in enumerate(consultants, start=1):
-                print(f"{idx}. {consultant}")
+            while True:
+                print("Available slots:")
+                for idx, slot in enumerate(consultant_slots, start=1):
+                    print(f"{idx}. {slot}")
 
-            try:
-                consultant_choice = int(input("Choose consultant: ").strip())
-                if consultant_choice < 1 or consultant_choice > len(consultants):
-                    raise ValueError
-            except ValueError:
-                print("Invalid consultant choice. Please try again.")
-                continue  # Restart consultant selection
+                try:
+                    slot_choice = input("Choose a slot: ").strip()
+                    if not slot_choice.isdigit():
+                        raise ValueError("Slot choice must be a number.")
 
-            chosen_consultant = consultants[consultant_choice - 1]
-            break  # Exit loop on valid choice
+                    slot_choice = int(slot_choice)
+                    if slot_choice < 1 or slot_choice > len(consultant_slots):
+                        raise ValueError("Slot choice out of range.")
+                except ValueError as e:
+                    print(f"Invalid slot choice: {e}. Please try again.")
+                    continue  # Restart slot selection
 
-        consultant_slots = available_slots.get(chosen_consultant, [])
-        if not consultant_slots:
-            print(f"No available slots for {chosen_consultant}.")
-            return
+                chosen_slot = consultant_slots[slot_choice - 1]
+                break  # Exit loop on valid slot choice
 
-        while True:
-            print("Available slots:")
-            for idx, slot in enumerate(consultant_slots, start=1):
-                print(f"{idx}. {slot}")
+            # Convert chosen slot to customer_time and mentor_time
+            customer_time = chosen_slot  # assuming slot is already in customer's timezone
+            mentor_time = convert_to_timezone(chosen_slot, "Customer_Timezone",
+                                              "UTC")  # convert to a different timezone if needed
 
-            try:
-                slot_choice = input("Choose a slot: ").strip()
-                if not slot_choice.isdigit():
-                    raise ValueError("Slot choice must be a number.")
+            # Remove the chosen slot from available slots for the chosen consultant
+            available_slots[chosen_consultant].remove(chosen_slot)
 
-                slot_choice = int(slot_choice)
-                if slot_choice < 1 or slot_choice > len(consultant_slots):
-                    raise ValueError("Slot choice out of range.")
-            except ValueError as e:
-                print(f"Invalid slot choice: {e}. Please try again.")
-                continue  # Restart slot selection
+            appointment = Appointment(user=user, consultant=chosen_consultant, customer_time=customer_time,
+                                      mentor_time=mentor_time)
+            appointments.append(appointment)
+            print("Appointment created successfully!")
 
-            chosen_slot = consultant_slots[slot_choice - 1]
-            break  # Exit loop on valid slot choice
-
-        # Convert chosen slot to customer_time and mentor_time
-        customer_time = chosen_slot  # assuming slot is already in customer's timezone
-        mentor_time = convert_to_timezone(chosen_slot, "Customer_Timezone", "UTC")  # convert to a different timezone if needed
-
-        # Remove the chosen slot from available slots for the chosen consultant
-        available_slots[chosen_consultant].remove(chosen_slot)
-
-        appointment = Appointment(user=user, consultant=chosen_consultant, customer_time=customer_time, mentor_time=mentor_time)
-        appointments.append(appointment)
-        print("Appointment created successfully!")
+        except KeyboardInterrupt:
+            print("\nProgram interrupted by user. Exiting gracefully.")
 
     # method to list all appointments
     def list_appointments(self):
-        if not appointments:
-            print("No appointments scheduled.")
-            return
+        try:
+            if not appointments:
+                print("No appointments scheduled.")
+                return
 
-        print("Scheduled Appointments:")
-        for idx, appointment in enumerate(appointments, start=1):
-            print(f"{idx}. User: {appointment.user.name}, Consultant: {appointment.consultant}, Time: {appointment.customer_time}")
+            print("Scheduled Appointments:")
+            for idx, appointment in enumerate(appointments, start=1):
+                print(f"{idx}. User: {appointment.user.name}, Consultant: {appointment.consultant}, Time: {appointment.customer_time}")
+        except KeyboardInterrupt:
+            print("\nProgram interrupted by user. Exiting gracefully.")

@@ -1,3 +1,4 @@
+from Database.database import appointments_table
 from data.storage import appointments, consultants, available_slots, users  #import data lists for appointments, consultants, and users
 from models.appointment import Appointment  #import the Appointment model
 from utils.timezone import convert_to_timezone  #import a utility function for timezone conversion
@@ -5,7 +6,8 @@ from utils.timezone import convert_to_timezone  #import a utility function for t
 #service class to handle appointment-related functionality
 class AppointmentService:
     #constructor for the AppointmentService class
-    def __init__(self, user_service):
+    def __init__(self, appointments_table, user_service):
+        self.appointments_table = appointments_table  # Store the appointments table
         self.user_service = user_service  #initialize with a user service for user-related operations
 
     #method to create a new appointment

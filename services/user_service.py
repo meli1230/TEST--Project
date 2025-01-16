@@ -1,12 +1,20 @@
 #from required modules and classes
 from data.storage import users, TIMEZONES  #import the user data and timezone list
 from models.user import User  #import the User model
+from Database.database import list_users as db_list_users  # Importă funcția pentru listare din baza de date
+from Database.database import delete_user as db_delete_user
+from Database.database import add_user as db_add_user
+
 import re
 
 #class to handle user-related functionality
 import re  # Import regex module for name validation
 
 class UserService:
+
+    def __init__(self, users_table):
+        self.users_table = users_table  # Conectează clasa la tabelul din baza de date
+
     # Method to add a new user
     def add_user(self):
         # Prompt the user to input their name
@@ -35,29 +43,36 @@ class UserService:
         # Generate a unique user ID and create the new user
         user_id = len(users) + 1
         user = User(user_id, name, timezone)  # Create a new User instance
-        users.append(user)  # Add the new user to the users list
+
+        result = db_add_user(user_id, name, timezone)  # Salvează utilizatorul în baza de date
+        print(result)
+
+        #users.append(user)  # Add the new user to the users list
 
         # Confirm successful user addition
-        print(f"User {name} added successfully with timezone {timezone}.")
+        #print(f"User {name} added successfully with timezone {timezone}.")
 
     #method to delete a user
     def delete_user(self):
         self.list_users_when_delete()  #list all users for selection during deletion
         username = input("Enter user name to delete: ")  #prompt the user to input the name of the user to delete
-        for user in users:  #iterate through the list of users
-            if user.name == username:  #check if the current user matches the input name
-                users.remove(user)  #remove the user from the list
-                print(f"User {user.name} deleted successfully.")  #confirm successful deletion
-                return  #exit the function after deletion
-        print("User not found.")  #notify if the user is not found
+        # Call the database function to delete the user
+        result = db_delete_user(username)
+        print(result)  # Print the result of the delete operation
 
     #method to list all users
-    def list_users(self):
+    def list_users(self, users=None):
         if not users:  #check if there are no users
             print("No users found.")  #notify if no users are found
             return  #exit the function
-        for user in users:  #iterate through the list of users
-            print(f"ID: {user.user_id}, Name: {user.name}, Timezone: {user.timezone}")  #display user details
+        users = db_list_users()
+        if not users:
+            print("No users found.")
+        else:
+            for user in users:
+                print(f"ID: {user['user_id']}, Name: {user['name']}, Timezone: {user['timezone']}")
+        #for user in users:  #iterate through the list of users
+            #print(f"ID: {user.user_id}, Name: {user.name}, Timezone: {user.timezone}")  #display user details
 
     #method to list users for deletion
     def list_users_when_delete(self):

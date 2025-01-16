@@ -44,7 +44,7 @@ class UserService:
         user_id = len(users) + 1
         user = User(user_id, name, timezone)  # Create a new User instance
 
-        result = db_add_user(user_id, name, timezone)  # Salvează utilizatorul în baza de date
+        result = db_add_user(None, name, timezone)  # Transmite `None` pentru `user_id`, deoarece este generat automat.
         print(result)
 
         #users.append(user)  # Add the new user to the users list
@@ -71,8 +71,9 @@ class UserService:
 
     #method to list users for deletion
     def list_users_when_delete(self):
-        if not users:  #check if there are no users
-            print("No users found.")  #notify if no users are found
-            return  #exit the function
-        for user in users:  #iterate through the list of users
-            print(f"Name: {user.name}, Timezone: {user.timezone}")  #display user details
+        users = db_list_users()  # Folosește funcția care accesează utilizatorii din baza de date
+        if not users:  # Verifică dacă lista este goală
+            print("No users found.")  # Afișează un mesaj dacă nu există utilizatori
+            return
+        for user in users:  # Iterează prin utilizatorii din baza de date
+            print(f"ID: {user['user_id']}, Name: {user['name']}, Timezone: {user['timezone']}")

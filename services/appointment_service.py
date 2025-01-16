@@ -3,6 +3,9 @@ from data.storage import appointments, consultants, available_slots  # Eliminat 
 from models.appointment import Appointment  # Import the Appointment model
 from utils.timezone import convert_to_timezone  # Import a utility function for timezone conversion
 from Database.database import list_users as db_list_users  # Import list_users direct din baza de date
+from Database.database import add_appointment
+from Database.database import list_appointments as db_list_appointments
+
 
 # Service class to handle appointment-related functionality
 class AppointmentService:
@@ -67,18 +70,26 @@ class AppointmentService:
         appointment = Appointment(user, consultant, customer_time, mentor_time)  # Create appointment object with both times
         appointments.append(appointment)  # Add appointment to the list
 
+        #add_appointment(user, consultant, customer_time, mentor_time)
+        add_appointment({
+            'user_id': user['user_id'],
+            'name': user['name'],
+            'timezone': user['timezone']
+        }, consultant, customer_time, mentor_time)
+
         print("Appointment created successfully.")  # Confirm successful creation
         print(f"Appointment time in your timezone: {customer_time}")  # Display customer's timezone appointment
         print(f"Appointment time in Bucharest timezone: {mentor_time}")  # Display mentor's timezone appointment
 
     # Method to list all scheduled appointments
     def list_appointments(self):
+        appointments = db_list_appointments()  # Preia programările din baza de date
         if not appointments:  # Check if there are no appointments
             print("No appointments scheduled.")  # Notify no appointments found
             return  # Exit the function
 
         for appt in appointments:  # Iterate through the list of appointments
-            print(f"User: {appt.user['name']}, Consultant: {appt.consultant}")  # Print user and consultant details
-            print(f"  Time in Customer's Timezone: {appt.customer_time}")  # Print appointment time in customer's timezone
-            print(f"  Time in Mentor's Timezone (Bucharest): {appt.mentor_time}")  # Print appointment time in mentor's timezone
-            print("-" * 40)  # Print separator for readability
+            print(f"User: {appt['user']['name']}, Consultant: {appt['consultant']}")
+            print(f"  Time in Customer's Timezone: {appt['customer_time']}")
+            print(f"  Time in Mentor's Timezone: {appt['mentor_time']}")
+            print("-" * 40)

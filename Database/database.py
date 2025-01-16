@@ -16,8 +16,17 @@ def is_user_name_unique(name):
 def add_user(user_id, name, timezone):
     if not is_user_name_unique(name):
         return f"User with name '{name}' already exists!"
+
+    # Găsește următorul ID disponibil
+    existing_users = users_table.all()
+    if not existing_users:
+        user_id = 1  # Începe de la 1
+    else:
+        user_id = max(user['user_id'] for user in existing_users) + 1
+
     users_table.insert({'user_id': user_id, 'name': name, 'timezone': timezone})
     return "User added successfully!"
+
 
 # Ștergere utilizator
 def delete_user(name):

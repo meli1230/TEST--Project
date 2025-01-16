@@ -18,19 +18,21 @@ class AppointmentService:
             print("User not found. Please try again.")
             return
 
-        print("Available Consultants:")
-        for idx, consultant in enumerate(consultants, start=1):
-            print(f"{idx}. {consultant}")
+        while True:  # Loop only for consultant selection
+            print("Available Consultants:")
+            for idx, consultant in enumerate(consultants, start=1):
+                print(f"{idx}. {consultant}")
 
-        try:
-            consultant_choice = int(input("Choose consultant: ").strip())
-            if consultant_choice < 1 or consultant_choice > len(consultants):
-                raise ValueError
-        except ValueError:
-            print("Invalid consultant choice. Please try again.")
-            return
+            try:
+                consultant_choice = int(input("Choose consultant: ").strip())
+                if consultant_choice < 1 or consultant_choice > len(consultants):
+                    raise ValueError
+            except ValueError:
+                print("Invalid consultant choice. Please try again.")
+                continue  # Restart consultant selection
 
-        chosen_consultant = consultants[consultant_choice - 1]
+            chosen_consultant = consultants[consultant_choice - 1]
+            break  # Exit loop on valid choice
 
         consultant_slots = available_slots.get(chosen_consultant, [])
         if not consultant_slots:

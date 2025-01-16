@@ -62,3 +62,13 @@ class AppointmentService:
         appointment = Appointment(user=user, consultant=chosen_consultant, customer_time=customer_time, mentor_time=mentor_time)
         appointments.append(appointment)
         print("Appointment created successfully!")
+
+    # method to list all appointments
+    def list_appointments(self):
+        if not appointments:
+            print("No appointments scheduled.")
+            return
+
+        print("Scheduled Appointments:")
+        for idx, appointment in enumerate(appointments, start=1):
+            print(f"{idx}. User: {appointment.user.name}, Consultant: {appointment.consultant}, Time: {appointment.customer_time}")

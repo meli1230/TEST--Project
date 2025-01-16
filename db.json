@@ -26,6 +26,26 @@
       "consultant": "Georgescu Cristian",
       "customer_time": "2025-02-15 15:00",
       "mentor_time": "2025-02-15 17:00"
+    },
+    "2": {
+      "user": {
+        "user_id": 2,
+        "name": "ale",
+        "timezone": "America/Anchorage"
+      },
+      "consultant": "Georgescu Cristian",
+      "customer_time": "2025-02-15 13:00",
+      "mentor_time": "2025-02-15 15:00"
+    },
+    "3": {
+      "user": {
+        "user_id": 2,
+        "name": "ale",
+        "timezone": "America/Anchorage"
+      },
+      "consultant": "Georgescu Cristian",
+      "customer_time": "2025-02-15 09:00",
+      "mentor_time": "2025-02-15 11:00"
     }
   }
 }

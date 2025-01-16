@@ -61,6 +61,9 @@ class AppointmentService:
         customer_time = chosen_slot  # assuming slot is already in customer's timezone
         mentor_time = convert_to_timezone(chosen_slot, "Customer_Timezone", "UTC")  # convert to a different timezone if needed
 
+        # Remove the chosen slot from available slots for the chosen consultant
+        available_slots[chosen_consultant].remove(chosen_slot)
+
         appointment = Appointment(user=user, consultant=chosen_consultant, customer_time=customer_time, mentor_time=mentor_time)
         appointments.append(appointment)
         print("Appointment created successfully!")

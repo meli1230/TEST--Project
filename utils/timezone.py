@@ -3,6 +3,33 @@ from zoneinfo import ZoneInfo  #import ZoneInfo for timezone handling
 from data.storage import TIMEZONES  #import predefined list of valid timezones
 from datetime import datetime, timedelta
 
+def choose_timezone():
+    """
+
+    Allow the user to select a valid timezone from a predefined list from storage.
+    If the input is invalid (>= 25), prompt the user to try again.
+"""
+
+    while True:
+        print("Available timezones:")
+        for i, tz in enumerate(TIMEZONES, 1):
+            print(f"{i}. {tz}")
+
+        try:
+            choice = int(input("Select a timezone by entering its number: "))
+            if choice >= 25:
+                print("Invalid choice. Please select a timezone from the list below.")
+                continue  # Retry the selection process
+            if 1 <= choice <= len(TIMEZONES):
+                selected_timezone = TIMEZONES[choice - 1]
+                print(f"You have selected: {selected_timezone}")
+                return selected_timezone
+            else:
+                print("Invalid choice. Please select a timezone from the list below.")
+        except ValueError:
+            print("Invalid input. Please enter a numeric value.")
+
+
 # Helper function to calculate UTC offset in hours
 def get_timezone_offset(timezone):
     timezone_offsets = {

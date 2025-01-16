@@ -11,7 +11,7 @@ venv/
 env/
 .venv/
 
-# Logs
+# Logs0
 *.log
 
 # OS-specific files

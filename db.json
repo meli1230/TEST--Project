@@ -1,1 +1,37 @@
-{"users": {"1": {"user_id": 1, "name": "Ale", "timezone": "America/New_York"}, "2": {"user_id": 2, "name": "Melisa", "timezone": "Europe/Paris"}}, "appointments": {"1": {"user": {"user_id": 1, "name": "Ale", "timezone": "UTC"}, "consultant": "Consultant B", "customer_time": "2024-12-15 15:00", "mentor_time": "2024-12-15 17:00"}, "2": {"user": {"user_id": 1, "name": "alexandra", "timezone": "America/New_York"}, "consultant": "Consultant C", "customer_time": "2024-12-16 07:00", "mentor_time": "2024-12-16 14:00"}, "3": {"user": {"user_id": 2, "name": "Melisa", "timezone": "Europe/Paris"}, "consultant": "Consultant C", "customer_time": "2024-12-16 16:00", "mentor_time": "2024-12-16 18:00"}}}
+{
+  "users": {
+    "1": {
+      "user_id": 1,
+      "name": "Ale",
+      "timezone": "America/New_York"
+    },
+    "2": {
+      "user_id": 2,
+      "name": "Melisa",
+      "timezone": "Europe/Paris"
+    }
+  },
+  "appointments": {
+    "1": {
+      "user": {
+        "user_id": 1,
+        "name": "Ale",
+        "timezone": "UTC"
+      },
+      "consultant": "Consultant B",
+      "customer_time": "2024-12-15 15:00",
+      "mentor_time": "2024-12-15 17:00"
+    },
+
+    "2": {
+      "user": {
+        "user_id": 2,
+        "name": "Melisa",
+        "timezone": "Europe/Paris"
+      },
+      "consultant": "Consultant C",
+      "customer_time": "2024-12-16 16:00",
+      "mentor_time": "2024-12-16 18:00"
+    }
+  }
+}

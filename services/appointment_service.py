@@ -42,8 +42,8 @@ class AppointmentService:
 
         try:
             slot_idx = int(input("Choose a slot: ")) - 1  #get slot choice and convert to zero-based index
-            if slot_idx not in range(len(slots)):  #validate slot index
-                raise ValueError("Invalid slot index.")  #raise error if index is invalid
+            if slot_idx not in range(len(slots)):  # validate slot index
+                raise ValueError("Invalid slot index. Please select a valid slot.")  # Corrected message
             chosen_slot = slots.pop(slot_idx)  #remove chosen slot from availability
         except ValueError as e:  #handle invalid input
             print(e)  #print error message

@@ -13,7 +13,7 @@ class UserService:
         name = input("Enter user name: ").strip()
 
         # Validate the name: only allow alphabetic characters and spaces
-        if not re.match("^[A-Za-z ]+$", name):
+        if not re.match("^[A-Za-z0-9 _@!#$%^&*()+=-]+$", name):
             print("Invalid name. Names should not contain numbers or special characters.")
             return  # Exit the method if the name is invalid
 

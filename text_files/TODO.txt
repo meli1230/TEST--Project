@@ -1,0 +1,131 @@
+- consultant - le dam nume la consultanti (sunt consultant A, B, C)
+- listam la fiecare ce au liber
+- facem mai complex la add_appointment
+- sa fie user names unici
+- daca inputul nu e bun sa nu crape
+- sa nu crape programul in niciun caz niciodata
+- testare pozitiva SI negativa
+
+
+-La prima varianta de testare a lui Adi:
+C:\Users\Asus\PycharmProjects\TEST--Project\.venv1\Scripts\python.exe "C:/Program Files/JetBrains/PyCharm 2024.3/plugins/python-ce/helpers/pycharm/_jb_unittest_runner.py" --path C:\Users\Asus\PycharmProjects\TEST--Project\tests\user_service_test.py
+Testing started at 3:59 PM ...
+Launching unittests with arguments python -m unittest C:\Users\Asus\PycharmProjects\TEST--Project\tests\user_service_test.py in C:\Users\Asus\PycharmProjects\TEST--Project\tests
+
+Available Time Zones:
+1. UTC
+2. Pacific/Midway
+3. America/Adak
+4. America/Anchorage
+5. America/Los_Angeles
+6. America/Denver
+7. America/Chicago
+8. America/New_York
+9. America/Caracas
+10. America/Sao_Paulo
+11. Atlantic/Azores
+12. Europe/London
+13. Europe/Paris
+14. Europe/Istanbul
+15. Europe/Moscow
+16. Asia/Dubai
+17. Asia/Karachi
+18. Asia/Kolkata
+19. Asia/Bangkok
+20. Asia/Shanghai
+21. Asia/Tokyo
+22. Australia/Sydney
+23. Pacific/Noumea
+24. Pacific/Auckland
+Invalid input: invalid literal for int() with base 10: 'Utilizator test2'. Defaulting to UTC.
+User Utilizator test added successfully with timezone UTC.
+
+Error
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2288.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line 1396, in patched
+    return func(*newargs, **newkeywargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Asus\PycharmProjects\TEST--Project\tests\user_service_test.py", line 43, in test_add_multiple_users
+    self.service.add_user()
+  File "C:\Users\Asus\PycharmProjects\TEST--Project\services\user_service.py", line 7, in add_user
+    name = input("Enter user name: ")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2288.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line 1139, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2288.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line 1143, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2288.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line 1200, in _execute_mock_call
+    result = next(effect)
+             ^^^^^^^^^^^^
+StopIteration
+
+Available Time Zones:
+1. UTC
+2. Pacific/Midway
+3. America/Adak
+4. America/Anchorage
+5. America/Los_Angeles
+6. America/Denver
+7. America/Chicago
+8. America/New_York
+9. America/Caracas
+10. America/Sao_Paulo
+11. Atlantic/Azores
+12. Europe/London
+13. Europe/Paris
+14. Europe/Istanbul
+15. Europe/Moscow
+16. Asia/Dubai
+17. Asia/Karachi
+18. Asia/Kolkata
+19. Asia/Bangkok
+20. Asia/Shanghai
+21. Asia/Tokyo
+22. Australia/Sydney
+23. Pacific/Noumea
+24. Pacific/Auckland
+Invalid input: . Defaulting to UTC.
+User Utilizator test added successfully with timezone UTC.
+Available Time Zones:
+1. UTC
+2. Pacific/Midway
+3. America/Adak
+4. America/Anchorage
+5. America/Los_Angeles
+6. America/Denver
+7. America/Chicago
+8. America/New_York
+9. America/Caracas
+10. America/Sao_Paulo
+11. Atlantic/Azores
+12. Europe/London
+13. Europe/Paris
+14. Europe/Istanbul
+15. Europe/Moscow
+16. Asia/Dubai
+17. Asia/Karachi
+18. Asia/Kolkata
+19. Asia/Bangkok
+20. Asia/Shanghai
+21. Asia/Tokyo
+22. Australia/Sydney
+23. Pacific/Noumea
+24. Pacific/Auckland
+Invalid input: . Defaulting to UTC.
+User Utilizator test2 added successfully with timezone UTC.
+Name: Utilizator test, Timezone:
+User Utilizator test deleted successfully.
+
+
+Ran 5 tests in 0.021s
+
+FAILED (errors=1)
+
+Process finished with exit code 1
+Asta returneaza la run ;-;
+
+-Pentru a doua varianta: Avem Fail in cazul in care numele contine ori numere ori caractere speciale si
+testarea se opreste pentru test_add_multiple_users care ar trebui sa verifice daca se pot adauga mai multi utilizatori, deci
+cred ca e ceva gresit la cum am facut eu functia de testare dar nu gasesc o solutie

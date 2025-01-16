@@ -61,18 +61,13 @@ class UserService:
         print(result)  # Print the result of the delete operation
 
     #method to list all users
-    def list_users(self, users=None):
-        if not users:  #check if there are no users
-            print("No users found.")  #notify if no users are found
-            return  #exit the function
-        users = db_list_users()
-        if not users:
-            print("No users found.")
+    def list_users(self):
+        users = db_list_users()  # Apelează funcția de listare din database.py
+        if not users:  # Dacă lista este goală
+            print("No users found.")  # Mesaj de eroare
         else:
-            for user in users:
+            for user in users:  # Iterează prin utilizatori
                 print(f"ID: {user['user_id']}, Name: {user['name']}, Timezone: {user['timezone']}")
-        #for user in users:  #iterate through the list of users
-            #print(f"ID: {user.user_id}, Name: {user.name}, Timezone: {user.timezone}")  #display user details
 
     #method to list users for deletion
     def list_users_when_delete(self):

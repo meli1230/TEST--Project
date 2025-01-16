@@ -29,7 +29,9 @@ def delete_user(name):
 
 # Listare utilizatori
 def list_users():
-    return users_table.all()
+    data = users_table.all()  # Accesează toate înregistrările din tabelul 'users_table'
+    print("Debug: Users in database:", data)  # Verifică ce date sunt returnate
+    return data
 
 # Adăugare programare
 def add_appointment(user, consultant, customer_time, mentor_time):

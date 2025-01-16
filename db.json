@@ -1,0 +1,26 @@
+{
+  "users": {
+    "1": {
+      "user_id": 1,
+      "name": "melisa",
+      "timezone": "America/Denver"
+    },
+    "2": {
+      "user_id": 2,
+      "name": "ale",
+      "timezone": "America/Anchorage"
+    }
+  },
+  "appointments": {
+    "1": {
+      "user": {
+        "user_id": 1,
+        "name": "melisa",
+        "timezone": "America/Denver"
+      },
+      "consultant": "Georgescu Cristian",
+      "customer_time": "2025-02-15 15:00",
+      "mentor_time": "2025-02-15 17:00"
+    }
+  }
+}

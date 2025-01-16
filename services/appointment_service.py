@@ -1,6 +1,7 @@
 from data.storage import appointments, consultants, available_slots, users  # import data lists for appointments, consultants, and users
 from models.appointment import Appointment  # import the Appointment model
 from utils.timezone import convert_to_timezone  # import a utility function for timezone conversion
+import re  # import regular expressions module for input validation
 
 # service class to handle appointment-related functionality
 class AppointmentService:
@@ -11,12 +12,17 @@ class AppointmentService:
     # method to create a new appointment
     def create_appointment(self):
         self.user_service.list_users()  # list all available users
-        user_name = input("Enter user name: ").strip()  # prompt user for their name and remove extra spaces
-        user = next((u for u in users if u.name.lower() == user_name.lower()), None)  # find user by name, case insensitive
+        while True:
+            user_name = input("Enter user name: ").strip()  # prompt user for their name and remove extra spaces
+            if not re.match(r'^[a-zA-Z\u00C0-\u017F\s]+$', user_name):  # allow letters, spaces, and accented characters
+                print("Invalid name. Please use only letters and spaces.")
+                continue
 
-        if not user:  # check if user is not found
-            print("User not found. Please try again.")
-            return
+            user = next((u for u in users if u.name.lower() == user_name.lower()), None)  # find user by name, case insensitive
+            if not user:  # check if user is not found
+                print("User not found. Please try again.")
+                return
+            break
 
         while True:  # Loop only for consultant selection
             print("Available Consultants:")
@@ -39,23 +45,25 @@ class AppointmentService:
             print(f"No available slots for {chosen_consultant}.")
             return
 
-        print("Available slots:")
-        for idx, slot in enumerate(consultant_slots, start=1):
-            print(f"{idx}. {slot}")
+        while True:
+            print("Available slots:")
+            for idx, slot in enumerate(consultant_slots, start=1):
+                print(f"{idx}. {slot}")
 
-        try:
-            slot_choice = input("Choose a slot: ").strip()
-            if not slot_choice.isdigit():
-                raise ValueError("Slot choice must be a number.")
+            try:
+                slot_choice = input("Choose a slot: ").strip()
+                if not slot_choice.isdigit():
+                    raise ValueError("Slot choice must be a number.")
 
-            slot_choice = int(slot_choice)
-            if slot_choice < 1 or slot_choice > len(consultant_slots):
-                raise ValueError("Slot choice out of range.")
-        except ValueError as e:
-            print(f"Invalid slot choice: {e}. Please try again.")
-            return
+                slot_choice = int(slot_choice)
+                if slot_choice < 1 or slot_choice > len(consultant_slots):
+                    raise ValueError("Slot choice out of range.")
+            except ValueError as e:
+                print(f"Invalid slot choice: {e}. Please try again.")
+                continue  # Restart slot selection
 
-        chosen_slot = consultant_slots[slot_choice - 1]
+            chosen_slot = consultant_slots[slot_choice - 1]
+            break  # Exit loop on valid slot choice
 
         # Convert chosen slot to customer_time and mentor_time
         customer_time = chosen_slot  # assuming slot is already in customer's timezone
